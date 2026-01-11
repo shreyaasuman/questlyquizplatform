@@ -4,50 +4,58 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center px-6">
-      <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl max-w-4xl w-full p-10 text-center animate-fade-in">
-        
-        {/* LOGO / NAME */}
-        <h1 className="text-5xl font-bold text-indigo-700 mb-4">
-          Questly ✨
+    <div className="min-h-screen bg-gradient-to-br from-indigo-600 to-purple-700 text-white">
+      
+      {/* HERO SECTION */}
+      <div className="max-w-6xl mx-auto px-6 py-24 text-center">
+        <h1 className="text-5xl font-extrabold mb-6 animate-fade-in">
+          Questly 🚀
         </h1>
 
-        {/* TAGLINE */}
-        <p className="text-xl text-gray-700 mb-6">
-          Create. Attempt. Compete.
+        <p className="text-xl max-w-2xl mx-auto mb-10 opacity-90">
+          Create quizzes, challenge friends, and track scores —  
+          all in one modern quiz platform.
         </p>
 
-        {/* DESCRIPTION */}
-        <p className="text-gray-600 max-w-2xl mx-auto mb-10">
-          <span className="font-semibold">Questly</span> is an interactive quiz
-          platform where admins can create smart quizzes and students can
-          attempt them using a unique quiz code. Track scores, view leaderboards,
-          and learn in a fun, competitive way.
-        </p>
-
-        {/* ACTION BUTTONS */}
-        <div className="flex flex-col sm:flex-row justify-center gap-6">
+        <div className="flex justify-center gap-6">
           <button
             onClick={() => navigate("/login")}
-            className="px-8 py-3 bg-indigo-600 text-white rounded-xl text-lg font-medium
-                       transition transform hover:-translate-y-1 hover:shadow-xl active:scale-95"
+            className="bg-white text-indigo-700 px-6 py-3 rounded-xl font-semibold
+                       hover:scale-105 transition shadow-lg"
           >
-            🔐 Login
+            Login
           </button>
 
           <button
             onClick={() => navigate("/register")}
-            className="px-8 py-3 bg-white border-2 border-indigo-600 text-indigo-600 rounded-xl text-lg font-medium
-                       transition transform hover:-translate-y-1 hover:shadow-xl active:scale-95"
+            className="bg-indigo-900 px-6 py-3 rounded-xl font-semibold
+                       hover:scale-105 transition shadow-lg"
           >
-            📝 Register
+            Register
           </button>
         </div>
+      </div>
 
-        {/* FOOTER TEXT */}
-        <p className="mt-10 text-sm text-gray-500">
-          Built with ❤️ using MERN Stack
-        </p>
+      {/* FEATURES */}
+      <div className="bg-white text-gray-800 py-16">
+        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10 text-center">
+          
+          <div className="p-6 rounded-xl shadow hover:shadow-lg transition">
+            <h3 className="text-xl font-bold mb-3">🧠 Smart Quizzes</h3>
+            <p>Create timed quizzes with multiple questions and options.</p>
+          </div>
+
+          <div className="p-6 rounded-xl shadow hover:shadow-lg transition">
+            <h3 className="text-xl font-bold mb-3">🏆 Leaderboards</h3>
+            <p>See rankings with scores, avatars, and charts.</p>
+          </div>
+
+          <div className="p-6 rounded-xl shadow hover:shadow-lg transition">
+            <h3 className="text-xl font-bold mb-3">🎨 Modern UI</h3>
+            <p>Clean, aesthetic, responsive design built with Tailwind.</p>
+          </div>
+
+        </div>
       </div>
     </div>
   );

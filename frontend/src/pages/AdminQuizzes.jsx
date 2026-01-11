@@ -50,6 +50,11 @@ function AdminQuizzes() {
     navigate("/admin/edit-quiz");
   };
 
+  const viewResults = (quizId) => {
+    localStorage.setItem("quizId", quizId);
+    navigate("/leaderboard");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div
@@ -65,7 +70,7 @@ function AdminQuizzes() {
             </span>
           </h1>
 
-          {/* ➕ CREATE QUIZ BUTTON */}
+          {/* CREATE QUIZ */}
           <button
             onClick={() => navigate("/admin/create-quiz")}
             className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium
@@ -134,6 +139,15 @@ function AdminQuizzes() {
                                  active:scale-95"
                     >
                       ✏️ Edit
+                    </button>
+
+                    <button
+                      onClick={() => viewResults(quiz._id)}
+                      className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium
+                                 transition transform hover:-translate-y-0.5 hover:shadow-lg
+                                 active:scale-95"
+                    >
+                      📊 View Results
                     </button>
 
                     <button

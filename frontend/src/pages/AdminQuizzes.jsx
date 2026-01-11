@@ -52,14 +52,29 @@ function AdminQuizzes() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-5xl mx-auto bg-white p-8 rounded-2xl shadow-lg
-                ring-1 ring-indigo-100">
-        <h1 className="text-3xl font-bold mb-6 text-center flex justify-center items-center gap-3">
-          🧑‍🏫 Your Quizzes
-          <span className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">
-            Admin
-          </span>
-        </h1>
+      <div
+        className="max-w-5xl mx-auto bg-white p-8 rounded-2xl shadow-lg
+                   ring-1 ring-indigo-100"
+      >
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
+          <h1 className="text-3xl font-bold flex items-center gap-3">
+            🧑‍🏫 Your Quizzes
+            <span className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">
+              Admin
+            </span>
+          </h1>
+
+          {/* ➕ CREATE QUIZ BUTTON */}
+          <button
+            onClick={() => navigate("/admin/create-quiz")}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium
+                       transition transform hover:-translate-y-0.5 hover:shadow-lg
+                       active:scale-95"
+          >
+            ➕ Create New Quiz
+          </button>
+        </div>
 
         {quizzes.length === 0 ? (
           <p className="text-center text-gray-500">

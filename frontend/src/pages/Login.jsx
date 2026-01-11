@@ -16,6 +16,7 @@ function Login() {
 
       // ✅ Save JWT token
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
       // ✅ Save user info (name, avatar, role)
       localStorage.setItem("user", JSON.stringify(res.data.user));

@@ -72,3 +72,24 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+// UPGRADE USER TO ADMIN
+exports.upgradeToAdmin = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role === "admin") {
+      return res.status(400).json({ message: "Already an admin" });
+    }
+
+    user.role = "admin";
+    await user.save();
+
+    res.json({ message: "Upgraded to admin successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

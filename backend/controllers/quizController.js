@@ -16,7 +16,8 @@ exports.createQuiz = async (req, res) => {
       title,
       description,
       quizCode,
-      questions
+      questions,
+      createdBy: req.user.id
     });
 
     res.status(201).json({
@@ -121,11 +122,12 @@ exports.getLeaderboard = async (req, res) => {
 // ===============================
 exports.getAllQuizzes = async (req, res) => {
   try {
-    const quizzes = await Quiz.find().sort({ createdAt: -1 });
+    const quizzes = await Quiz.find({
+      createdBy: req.user.id
+    }).sort({ createdAt: -1 });
 
     res.json(quizzes);
   } catch (error) {
-    console.error("GET QUIZZES ERROR:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

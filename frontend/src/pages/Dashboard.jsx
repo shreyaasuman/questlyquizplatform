@@ -4,6 +4,7 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -15,10 +16,37 @@ function Dashboard() {
     navigate("/admin/quizzes");
   };
 
-  const upgradeToAdmin = () => {
-    alert(
-      "Admin upgrade coming soon 🚀\nFor now, ask the system admin 😉"
-    );
+  const upgradeToAdmin = async () => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/upgrade`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Upgrade failed");
+        return;
+      }
+
+      // 🔥 SAVE NEW ADMIN TOKEN + USER
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      alert("🎉 You are now an Admin!");
+
+      // Re-render app with new role + token
+      window.location.reload();
+    } catch (error) {
+      alert("Upgrade failed");
+    }
   };
 
   return (
@@ -38,8 +66,7 @@ function Dashboard() {
                 Welcome, {user?.name} 👋
               </h1>
               <span
-                className={`inline-block mt-1 px-3 py-1 text-xs rounded-full
-                ${
+                className={`inline-block mt-1 px-3 py-1 text-xs rounded-full ${
                   user?.role === "admin"
                     ? "bg-purple-100 text-purple-700"
                     : "bg-gray-100 text-gray-600"
@@ -79,7 +106,7 @@ function Dashboard() {
             </button>
           </div>
 
-          {/* ADMIN / UPGRADE CARD */}
+          {/* ADMIN / UPGRADE */}
           {user?.role === "admin" ? (
             <div className="p-6 border rounded-xl hover:shadow-lg transition">
               <h2 className="text-xl font-semibold mb-2">🧑‍🏫 Admin Panel</h2>
@@ -107,7 +134,7 @@ function Dashboard() {
                            transition transform hover:-translate-y-0.5 hover:shadow-lg
                            active:scale-95"
               >
-                Become Admin
+                Upgrade to Admin
               </button>
             </div>
           )}

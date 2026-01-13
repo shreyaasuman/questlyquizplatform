@@ -72,23 +72,34 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-// UPGRADE USER TO ADMIN
 exports.upgradeToAdmin = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const userId = req.user.id;
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { role: "admin" },
+      { new: true }
+    );
 
-    if (user.role === "admin") {
-      return res.status(400).json({ message: "Already an admin" });
-    }
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
-    user.role = "admin";
-    await user.save();
-
-    res.json({ message: "Upgraded to admin successfully" });
+    res.json({
+      message: "Upgraded to admin successfully",
+      token,
+      user: {
+        name: user.name,
+        avatar: user.avatar,
+        role: user.role
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

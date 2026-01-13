@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../services/api";
 
 function Quiz() {
   const navigate = useNavigate();
@@ -40,33 +41,24 @@ function Quiz() {
     setAnswers({ ...answers, [qIndex]: optionIndex });
   };
 
-  // SUBMIT QUIZ → BACKEND → LEADERBOARD
+  // ✅ SUBMIT QUIZ (FIXED)
   const submitQuiz = async () => {
     try {
+      if (submitted) return;
       setSubmitted(true);
 
-      const token = localStorage.getItem("token");
-
-      const res = await fetch("http://localhost:5000/api/quiz/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          quizId: quiz.quizId,
-          answers
-        })
+      const res = await API.post("/quiz/submit", {
+        quizId: quiz.quizId,
+        answers
       });
 
-      const data = await res.json();
-
-      alert(`Quiz submitted! Your score: ${data.score}/${data.total}`);
+      alert(
+        `Quiz submitted! Your score: ${res.data.score}/${res.data.totalQuestions}`
+      );
 
       // store quizId for leaderboard
       localStorage.setItem("quizId", quiz.quizId);
 
-      // go to leaderboard
       navigate("/leaderboard");
     } catch (error) {
       alert("Error submitting quiz");

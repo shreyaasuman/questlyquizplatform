@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
   LabelList
 } from "recharts";
+import API from "../services/api";
 
 function Leaderboard() {
   const [results, setResults] = useState([]);
@@ -19,22 +20,11 @@ function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const token = localStorage.getItem("token");
+        // 🔹 Fetch leaderboard (JWT auto-attached)
+        const res = await API.get(`/quiz/leaderboard/${quizId}`);
 
-        // 🔹 Fetch leaderboard results
-        const res = await fetch(
-          `http://localhost:5000/api/quiz/leaderboard/${quizId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-
-        const data = await res.json();
-
-        // ✅ sort by score (desc)
-        const sorted = data.sort((a, b) => b.score - a.score);
+        // sort by score desc
+        const sorted = res.data.sort((a, b) => b.score - a.score);
 
         const formatted = sorted.map((r) => ({
           name: r.userId.name,
@@ -45,31 +35,22 @@ function Leaderboard() {
 
         setResults(formatted);
 
-        // 🔹 Fetch quiz info (for title)
-        const quizRes = await fetch(
-          `http://localhost:5000/api/quiz/${quizId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-
-        const quizData = await quizRes.json();
-        setQuizTitle(quizData.title);
-
+        // 🔹 Fetch quiz info (title)
+        const quizRes = await API.get(`/quiz/${quizId}`);
+        setQuizTitle(quizRes.data.title);
       } catch (error) {
         alert("Failed to load leaderboard");
       }
     };
 
-    fetchLeaderboard();
+    if (quizId) {
+      fetchLeaderboard();
+    }
   }, [quizId]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-5xl mx-auto bg-white p-8 rounded-2xl shadow-xl animate-fade-in">
-
         {/* TITLE */}
         <h1 className="text-3xl font-bold mb-2 text-center">
           🏆 Leaderboard
@@ -134,9 +115,7 @@ function Leaderboard() {
                     alt="avatar"
                     className="w-12 h-12 rounded-full border mb-1"
                   />
-                  <span className="text-sm font-medium">
-                    {r.name}
-                  </span>
+                  <span className="text-sm font-medium">{r.name}</span>
                 </div>
               ))}
             </div>
@@ -159,9 +138,7 @@ function Leaderboard() {
                   key={index}
                   className="text-center border-t hover:bg-gray-50"
                 >
-                  <td className="p-3 font-semibold">
-                    #{index + 1}
-                  </td>
+                  <td className="p-3 font-semibold">#{index + 1}</td>
                   <td className="p-3">
                     <div className="flex items-center justify-center gap-2">
                       <img

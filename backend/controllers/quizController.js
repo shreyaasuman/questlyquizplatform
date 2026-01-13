@@ -89,7 +89,7 @@ exports.submitQuiz = async (req, res) => {
     res.json({
       message: "Quiz submitted",
       score,
-      total: quiz.questions.length
+      totalQuestions: quiz.questions.length
     });
   } catch (error) {
     console.error("SUBMIT QUIZ ERROR:", error);

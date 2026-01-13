@@ -9,7 +9,7 @@ const quizRoutes = require("./routes/quizRoutes");
 const app = express();
 
 /* ======================
-   CORS CONFIG (FIXED)
+   CORS CONFIG (FINAL)
 ====================== */
 const allowedOrigins = [
   "http://localhost:5173",
@@ -23,10 +23,10 @@ app.use(
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+        return callback(null, true);
       }
+
+      callback(new Error("Not allowed by CORS"));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -34,11 +34,8 @@ app.use(
   })
 );
 
-// 🔥 REQUIRED for preflight requests
-app.options("*", cors());
-
 /* ======================
-   BODY PARSERS (FIXED)
+   BODY PARSERS (REQUIRED)
 ====================== */
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
